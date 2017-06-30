@@ -1,0 +1,35 @@
+<% content_for :title, 'Shoes' %>
+
+<h1>Hi <%= current_user.first_name %> <%= current_user.last_name %></h1>
+
+<h3><a href="/dashboard/<%= current_user.id %>">Go to Dashboard</a></h3>
+
+<h2>All Products</h2>
+
+<table border="1">
+	<tr>
+		<td>Product</td>
+		<td>Seller</td>
+		<td>Date Posted</td>
+		<td>Amount</td>
+		<td>Action</td>
+	</tr>
+	<% @shoes.each do |shoe| %>
+		<tr>
+			<td><%= shoe.product %></td>
+			<td><%= shoe.user.first_name %></td>
+			<td><%= shoe.created_at %></td>
+			<td><%= shoe.amount %></td>
+			<td>
+				<form action="/historys" method="POST">
+				<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+				<input type="hidden" name="history[user_id]" value="<%= current_user.id %>">
+				<input type="hidden" name="history[shoe_id]" value="<%= shoe.id %>">
+				<input type="submit" value="Buy">
+
+					
+				</form>
+			</td>
+		</tr>
+	<% end %>
+</table>

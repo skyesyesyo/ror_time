@@ -1,0 +1,74 @@
+<% content_for :title, 'Your Dashboard' %>
+
+<h1>Hi <%= current_user.first_name %> <%= current_user.last_name %></h1>
+
+<h3><a href="/shoes">Go to All Products</a></h3>
+
+<h3>Sell Product</h3>
+
+<form action="/shoes" method="POST">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="hidden" name="shoe[user_id]" value="<%= current_user.id %>">
+	<input type="hidden" name="shoe[status]" value="0">
+
+	<p>Name: <input type="text" name="shoe[product]"></p>
+	<p>Amount: <input type="number" name="shoe[amount]"></p>
+	
+	<input type="submit" value="Sell">
+	
+</form>
+
+<h2><strong>Your products that are not yet sold:</strong></h2>
+	<table border="1">
+		<tr>
+			<td>Product</td>
+			<td>Date Posted</td>
+			<td>Amount</td>
+			<td>Action</td>
+		</tr>
+		<% @notsold.each do |ns| %>
+			<tr>
+				<td><%= ns.product %></td>
+				<td><%= ns.created_at %></td>
+				<td><%= ns.amount %></td>
+				<td><a href="/shoes/<%= ns.id %>" data-method="DELETE" data-confirm="Are you sure?">Remove</a></td>
+
+
+			</tr>
+		<% end %>
+
+	</table>
+<h2><strong>Sales</strong></h2>
+	<table border="1">
+		<tr>
+			<td>Product</td>
+			<td>Date Bought</td>
+			<td>Amount</td>
+		</tr>
+		<% @sold.each do |s| %>
+			<tr>
+				<td><%= s.product %></td>
+				<td><%= s.updated_at %></td>
+				<td><%= s.amount %></td>
+			</tr>
+		<% end %>
+	</table>
+	<h1>Total: $<%= @sum %></h1>
+<h2><strong>Purchases</strong></h2>
+	<table border="1">
+		<tr>
+			<td>Poduct</td>
+			<td>Date Bought</td>
+			<td>Seller</td>
+			<td>Amount</td>
+		</tr>
+		<% @purchases.each do |p| %>
+		<tr>
+			<td><%= p.product %></td>
+			<td><%= p.updated_at %></td>
+			<td><%= p.user.first_name %></td>
+			<td><%= p.amount %></td>
+		</tr>
+		<% end %>
+	</table>
+	<h1>Total $<%= @tpurchase %></h1>
